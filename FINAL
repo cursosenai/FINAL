@@ -88,10 +88,10 @@ lcd.print("%       ");			          //escreve no lcd na posição acima
  lcd.print("        ");
 }
 
-  comb=analogRead(sensor);
   bt.print(comb1);
   bt.println("%");
   Serial.println(comb1);
+    
 delay(1000);
 
 }
