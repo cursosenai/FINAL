@@ -17,6 +17,7 @@ int sensor =A0;
 int comb;
 float combustivel;
 
+//int pin = 10
 int analyzer=0, comb1=0;
 volatile int state = LOW;
 volatile int state1 = LOW;
@@ -61,9 +62,7 @@ attachInterrupt(0, analy, FALLING);
 
 ISR(TIMER1_COMPA_vect)          	    // timer compare interrupt service routine
 {
-  comb1=analyzer*2-50;   ////     
- 
-  //////////////////////
+  comb1=analyzer*2-50;  
   analyzer=0;
  }
 
@@ -90,10 +89,9 @@ lcd.print("%       ");			          //escreve no lcd na posição acima
 }
 
   comb=analogRead(sensor);
-  combustivel=(((comb*5000.0)/1023)/10);
-  bt.print(combustivel);
-  bt.println(" %");
-  Serial.println(combustivel);
+  bt.print(comb1);
+  bt.println("%");
+  Serial.println(comb1);
 delay(1000);
 
 }
