@@ -11,7 +11,11 @@
 #include <SoftwareSerial.h>
 
 LiquidCrystal_I2C lcd(0x27,16,4);	    //Inicializa o display no endereco 0x27
-SoftwareSerial bluetooth(1,0);		      // RX, TX 
+
+SoftwareSerial bt(1,0);		            // RX, TX 
+int sensor =A0;
+int comb;
+float combustivel;
 
 int analyzer=0, comb1=0;
 volatile int state = LOW;
@@ -24,6 +28,11 @@ analyzer++;
 
 void setup()
 {
+
+// inicializa Bluetooth 
+bt.begin(9600);                     //Inicia a comunicação serial com o computador
+Serial.begin(9600);                  //Inicia a comunicação serial com o modulo bluetooth  
+  
 //pinMode(pin, OUTPUT);
 attachInterrupt(0, analy, FALLING);
  lcd.init();				                  //inicia LCD de 16 colunas 4 linhas
@@ -46,11 +55,7 @@ attachInterrupt(0, analy, FALLING);
   TCCR1B |= (1 << CS12);    		      // 256 prescaler 
   TIMSK1 |= (1 << OCIE1A);  		      // enable timer compare interrupt
   interrupts();             		      // enable all interrupts
-  lcd.clear();
-
-// inicializa Bluetooth 
-  Serial.begin(9600);                 //Inicia a comunicação serial com o computador
-  bluetooth.begin(9600);              //Inicia a comunicação serial com o modulo bluetooth              
+  lcd.clear();        
 
 }
 
@@ -84,14 +89,11 @@ lcd.print("%       ");			          //escreve no lcd na posição acima
  lcd.print("        ");
 }
 
-if (Bluetooth.available()) {          //Verificando se há dados disponíveis para leitura do módulo Bluetooth
-    char receivedChar = bluetooth.read(); // Lendo o caractere recebido do módulo Bluetooth  
-    Serial.print("Caractere recebido: ");
-    Serial.println(receivedChar);
-   }
-
-  if (Serial.available()) {
-    char sendChar -Serial.raad();
-    bluetooth.write(sendChar);
+  comb=analogRead(sensor);
+  combustivel=(((comb*5000.0)/1023)/10);
+  bt.print(combustivel);
+  bt.println(" %");
+  Serial.println(combustivel);
+delay(1000);
 
 }
